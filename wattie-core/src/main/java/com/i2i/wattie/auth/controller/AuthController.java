@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.UUID;
 
 /**
- * Authentication controller for VoltWise Web App.
+ * Authentication controller for Wattie Web App.
  * Provides a simple credential-based login endpoint for the frontend.
  * Credentials are injected via environment variables — never hardcoded.
  */
@@ -22,10 +22,10 @@ import java.util.UUID;
 @Tag(name = "Authentication")
 public class AuthController {
 
-    @Value("${voltwise.admin.email:admin@voltwise.com}")
+    @Value("${wattie.admin.email:admin@wattie.com}")
     private String adminEmail;
 
-    @Value("${voltwise.admin.password:voltwise123}")
+    @Value("${wattie.admin.password:wattie123}")
     private String adminPassword;
 
     @PostMapping("/login")
@@ -38,7 +38,7 @@ public class AuthController {
                     .success(true)
                     .message("Authentication successful")
                     .token(UUID.randomUUID().toString())
-                    .userName("VoltWise Admin")
+                    .userName("Wattie Admin")
                     .email(request.getEmail())
                     .build();
 
@@ -68,7 +68,7 @@ public class AuthController {
 
         return ResponseEntity.ok(LoginResponse.builder()
                 .success(true)
-                .userName("VoltWise Admin")
+                .userName("Wattie Admin")
                 .email(adminEmail)
                 .build());
     }
