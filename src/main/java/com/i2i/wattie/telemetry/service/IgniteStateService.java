@@ -45,4 +45,13 @@ public class IgniteStateService {
 
         cache.put(homeId, state);
     }
+
+    public void setPenaltyActive(Long homeId, boolean active) {
+        ClientCache<Long, HomeState> cache = cache();
+        HomeState state = cache.get(homeId);
+        if (state != null) {
+            state.setPenaltyActive(active);
+            cache.put(homeId, state);
+        }
+    }
 }

@@ -4,6 +4,8 @@ import com.i2i.wattie.home.entity.Home;
 import com.i2i.wattie.home.repository.HomeRepository;
 import com.i2i.wattie.telemetry.dto.TelemetryMessage;
 import com.i2i.wattie.telemetry.model.HomeState;
+import com.i2i.wattie.tariff.service.AnomalyRuleService;
+import com.i2i.wattie.tariff.service.TariffRuleService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -21,6 +23,8 @@ public class TelemetryProcessingService {
 
     private final HomeRepository homeRepository;
     private final IgniteStateService igniteStateService;
+    private final TariffRuleService tariffRuleService;
+    private final AnomalyRuleService anomalyRuleService;
 
     public void process(TelemetryMessage message) {
         Home home = homeRepository.findById(message.getHomeId()).orElse(null);
@@ -41,5 +45,9 @@ public class TelemetryProcessingService {
         BigDecimal deltaCost = deltaKwh.multiply(rate);
 
         igniteStateService.recordConsumption(message.getHomeId(), deltaKwh, deltaCost);
+
+        // Check tariff quota rules and anomaly rules
+        tariffRuleService.checkQuota(message.getHomeId());
+        anomalyRuleService.checkAppliance(message.getApplianceId(), message.getWatts());
     }
 }
