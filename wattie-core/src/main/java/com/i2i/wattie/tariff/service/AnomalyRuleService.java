@@ -32,6 +32,7 @@ public class AnomalyRuleService {
         return igniteClient.getOrCreateCache(CACHE_NAME);
     }
 
+    @org.springframework.transaction.annotation.Transactional
     public void checkAppliance(Long applianceId, BigDecimal currentWatts) {
         if (applianceId == null || currentWatts == null) return;
 
