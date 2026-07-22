@@ -1,0 +1,4 @@
+-------------------------------------------------------------------------------
+Test set: com.i2i.wattie.ai.service.GeminiClientServiceTest
+-------------------------------------------------------------------------------
+Tests run: 2, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 1.347 s -- in com.i2i.wattie.ai.service.GeminiClientServiceTest
