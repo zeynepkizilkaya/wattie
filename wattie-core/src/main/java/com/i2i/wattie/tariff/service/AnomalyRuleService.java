@@ -32,6 +32,7 @@ public class AnomalyRuleService {
         return igniteClient.getOrCreateCache(CACHE_NAME);
     }
 
+    @org.springframework.transaction.annotation.Transactional
     public void checkAppliance(Long applianceId, BigDecimal currentWatts) {
         if (applianceId == null || currentWatts == null) return;
 
@@ -48,6 +49,7 @@ public class AnomalyRuleService {
             state.setConsecutiveBreaches(state.getConsecutiveBreaches() + 1);
         } else {
             state.setConsecutiveBreaches(0);
+            state.setAnomalyFlagged(false);
         }
 
         if (state.getConsecutiveBreaches() >= ANOMALY_CONSECUTIVE_BREACHES && !state.isAnomalyFlagged()) {

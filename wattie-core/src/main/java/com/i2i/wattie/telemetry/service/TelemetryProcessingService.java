@@ -14,6 +14,9 @@ import java.math.MathContext;
 
 import static com.i2i.wattie.telemetry.TelemetryConstants.SAMPLE_INTERVAL_SECONDS;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class TelemetryProcessingService {
@@ -45,6 +48,13 @@ public class TelemetryProcessingService {
         BigDecimal deltaCost = deltaKwh.multiply(rate);
 
         igniteStateService.recordConsumption(message.getHomeId(), deltaKwh, deltaCost);
+
+        HomeState updatedState = igniteStateService.getHomeState(message.getHomeId());
+        log.info("⚡ Telemetri Islendi -> Ev: {} | Cihaz: {} | Güç: {} W | Toplam: {} kWh | Maliyet: {} TL | Ceza: {}",
+                home.getName(), message.getApplianceId(), message.getWatts(),
+                updatedState != null ? updatedState.getTotalKwh() : 0,
+                updatedState != null ? updatedState.getTotalCost() : 0,
+                penaltyActive ? "AKTIF" : "PASIF");
 
         // Check tariff quota rules and anomaly rules
         tariffRuleService.checkQuota(message.getHomeId());

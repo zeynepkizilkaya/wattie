@@ -28,6 +28,7 @@ public class TariffRuleService {
     private final EventLogRepository eventLogRepository;
     private final AiNotificationService aiNotificationService;
 
+    @org.springframework.transaction.annotation.Transactional
     public void checkQuota(Long homeId) {
         if (homeId == null) return;
 
