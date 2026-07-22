@@ -8,6 +8,7 @@ import com.i2i.wattie.home.entity.Appliance;
 import com.i2i.wattie.home.entity.Home;
 import com.i2i.wattie.home.repository.ApplianceRepository;
 import com.i2i.wattie.home.repository.ConsumptionSnapshotRepository;
+import com.i2i.wattie.home.repository.EventLogRepository;
 import com.i2i.wattie.home.repository.HomeRepository;
 import com.i2i.wattie.telemetry.dto.HomeRegisteredEvent;
 import lombok.RequiredArgsConstructor;
@@ -30,6 +31,7 @@ public class HomeService {
     private final HomeRepository homeRepository;
     private final ApplianceRepository applianceRepository;
     private final ConsumptionSnapshotRepository consumptionSnapshotRepository;
+    private final EventLogRepository eventLogRepository;
     private final KafkaTemplate<String, Object> kafkaTemplate;
     private final IgniteStateService igniteStateService;
 
@@ -82,6 +84,14 @@ public class HomeService {
 
         HomeRegisteredEvent event = new HomeRegisteredEvent(home.getId(), home.getName(), applianceInfos);
         kafkaTemplate.send(REGISTRATION_TOPIC, home.getId().toString(), event);
+    }
+
+    public List<Home> getAllHomes() {
+        return homeRepository.findAll();
+    }
+
+    public List<com.i2i.wattie.home.entity.EventLog> getHomeEvents(Long homeId) {
+        return eventLogRepository.findByHomeIdOrderByCreatedAtDesc(homeId);
     }
 
     public List<ConsumptionTrendResponse> getConsumptionTrend(Long homeId) {
