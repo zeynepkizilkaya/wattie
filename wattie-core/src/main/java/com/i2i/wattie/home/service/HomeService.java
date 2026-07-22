@@ -90,6 +90,26 @@ public class HomeService {
         return homeRepository.findAll();
     }
 
+    public List<Appliance> getHomeAppliances(Long homeId) {
+        return applianceRepository.findByHomeId(homeId);
+    }
+
+    @Transactional
+    public Appliance addApplianceToHome(Long homeId, ApplianceRequest request) {
+        Home home = homeRepository.findById(homeId)
+                .orElseThrow(() -> new IllegalArgumentException("Home not found with id: " + homeId));
+
+        Appliance appliance = new Appliance();
+        appliance.setHome(home);
+        appliance.setName(request.getName());
+        appliance.setType(request.getType());
+        appliance.setSafeLimitWatts(request.getSafeLimitWatts());
+
+        Appliance savedAppliance = applianceRepository.save(appliance);
+        publishRegistrationEvent(home, List.of(savedAppliance));
+        return savedAppliance;
+    }
+
     public List<com.i2i.wattie.home.entity.EventLog> getHomeEvents(Long homeId) {
         return eventLogRepository.findByHomeIdOrderByCreatedAtDesc(homeId);
     }

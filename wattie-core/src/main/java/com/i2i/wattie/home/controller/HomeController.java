@@ -41,6 +41,20 @@ public class HomeController {
         return ResponseEntity.ok(homeService.getHomeStatus(homeId));
     }
 
+    @GetMapping("/{homeId}/appliances")
+    @Operation(summary = "Get list of all appliances in a home")
+    public ResponseEntity<List<com.i2i.wattie.home.entity.Appliance>> getAppliances(@PathVariable Long homeId) {
+        return ResponseEntity.ok(homeService.getHomeAppliances(homeId));
+    }
+
+    @PostMapping("/{homeId}/appliances")
+    @Operation(summary = "Add a new appliance to an existing home")
+    public ResponseEntity<com.i2i.wattie.home.entity.Appliance> addAppliance(
+            @PathVariable Long homeId,
+            @Valid @RequestBody com.i2i.wattie.home.dto.ApplianceRequest request) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(homeService.addApplianceToHome(homeId, request));
+    }
+
     @GetMapping("/{homeId}/events")
     @Operation(summary = "Get all event logs and AI recommendations for a home")
     public ResponseEntity<List<com.i2i.wattie.home.entity.EventLog>> getEvents(@PathVariable Long homeId) {
