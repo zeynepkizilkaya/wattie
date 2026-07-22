@@ -18,6 +18,7 @@ public class AiNotificationService {
     private final EventLogRepository eventLogRepository;
     private final HomeRepository homeRepository;
 
+    @org.springframework.transaction.annotation.Transactional
     public void notify(Long homeId, String eventType, String details, EventLog eventLog) {
         log.info("Processing AI notification for homeId: {}, eventType: {}", homeId, eventType);
 
