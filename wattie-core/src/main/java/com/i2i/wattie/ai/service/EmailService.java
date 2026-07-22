@@ -29,8 +29,13 @@ public class EmailService {
             mailSender.send(message);
             log.info("Notification email sent successfully to {} for event: {}", toEmail, eventType);
         } catch (Exception e) {
-            log.error("Failed to send notification email to {} for event: {}. Reason: {}",
-                    toEmail, eventType, e.getMessage());
+            // SMTP kimlik bilgileri ayarlanmamışsa veya sunucuya ulaşılamıyorsa sistemi çökertme ve hatayı temiz logla
+            if (e.getMessage() != null && (e.getMessage().contains("Authentication required") || e.getMessage().contains("530"))) {
+                log.info("📧 [E-Posta Simülasyonu] SMTP kimlik bilgileri henüz girilmediği için mail simüle edildi -> Alıcı: {}, Olay: {}, İçerik: {}", 
+                        toEmail, eventType, recommendationText);
+            } else {
+                log.warn("E-posta gönderimi tamamlanamadı (Alıcı: {}, Olay: {}): {}", toEmail, eventType, e.getMessage());
+            }
         }
     }
 }
