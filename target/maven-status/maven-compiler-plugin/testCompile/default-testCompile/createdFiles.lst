@@ -1,0 +1,4 @@
+com\i2i\wattie\tariff\service\AnomalyRuleServiceTest.class
+com\i2i\wattie\tariff\service\TariffRuleServiceTest.class
+com\i2i\wattie\ai\service\GeminiClientServiceTest.class
+com\i2i\wattie\WattieCoreApplicationTests.class

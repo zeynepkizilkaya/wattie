@@ -1,0 +1,4 @@
+-------------------------------------------------------------------------------
+Test set: com.i2i.wattie.WattieCoreApplicationTests
+-------------------------------------------------------------------------------
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 7.937 s -- in com.i2i.wattie.WattieCoreApplicationTests
