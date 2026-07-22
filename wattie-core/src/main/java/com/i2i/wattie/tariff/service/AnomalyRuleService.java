@@ -49,6 +49,7 @@ public class AnomalyRuleService {
             state.setConsecutiveBreaches(state.getConsecutiveBreaches() + 1);
         } else {
             state.setConsecutiveBreaches(0);
+            state.setAnomalyFlagged(false);
         }
 
         if (state.getConsecutiveBreaches() >= ANOMALY_CONSECUTIVE_BREACHES && !state.isAnomalyFlagged()) {
