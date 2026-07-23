@@ -1,0 +1,34 @@
+.fallback {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 60vh;
+  padding: var(--space-xxl);
+  text-align: center;
+}
+
+.title {
+  font-size: var(--font-size-card-title);
+  font-weight: var(--font-weight-regular);
+  color: var(--color-ink);
+  margin-bottom: var(--space-xs);
+}
+
+.message {
+  font-size: var(--font-size-body);
+  color: var(--color-ink-muted);
+  margin-bottom: var(--space-lg);
+}
+
+.button {
+  padding: 12px var(--space-md);
+  background: var(--color-primary);
+  color: var(--color-on-primary);
+  font-size: var(--font-size-body-sm);
+  letter-spacing: var(--letter-spacing-body);
+}
+
+.button:hover {
+  background: var(--color-blue-hover);
+}

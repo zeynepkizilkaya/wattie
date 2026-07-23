@@ -1,0 +1,182 @@
+.card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-sm);
+  padding: var(--space-lg) var(--space-md);
+  background: var(--color-canvas);
+  border: 1px solid var(--color-hairline);
+  border-radius: var(--radius-none);
+  text-align: center;
+  transition: border-color 0.2s;
+}
+
+.card:hover {
+  border-color: var(--color-ink-subtle);
+}
+
+.anomalous {
+  border-color: var(--color-semantic-error);
+  animation: pulseGlow 2s ease-in-out infinite;
+}
+
+.removeBtn {
+  position: absolute;
+  top: var(--space-xs);
+  right: var(--space-xs);
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  color: var(--color-ink-subtle);
+  font-size: var(--font-size-caption);
+  opacity: 0;
+  transition: opacity 0.15s;
+}
+
+.card:hover .removeBtn {
+  opacity: 1;
+}
+
+.removeBtn:hover {
+  color: var(--color-semantic-error);
+}
+
+.ring {
+  position: relative;
+  width: 64px;
+  height: 64px;
+}
+
+.ringIcon {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.progress {
+  transition: stroke-dashoffset 0.6s ease;
+}
+
+.info {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.name {
+  font-size: var(--font-size-body-sm);
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: var(--letter-spacing-body);
+  color: var(--color-ink);
+}
+
+.watt {
+  font-size: var(--font-size-subhead);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-ink);
+  line-height: 1;
+}
+
+.limit {
+  font-size: var(--font-size-caption);
+  letter-spacing: var(--letter-spacing-caption);
+  color: var(--color-ink-muted);
+}
+
+.badge {
+  font-size: var(--font-size-caption);
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: var(--letter-spacing-caption);
+  color: var(--color-semantic-error);
+  padding: 2px var(--space-xs);
+  background: var(--color-error-subtle);
+}
+
+@keyframes pulseGlow {
+  0%, 100% {
+    border-color: var(--color-semantic-error);
+  }
+  50% {
+    border-color: rgba(218, 30, 40, 0.4);
+  }
+}
+
+.details {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin-top: 4px;
+}
+
+.breachCounter {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.32px;
+}
+
+.breachWarn {
+  color: var(--color-semantic-warning);
+}
+
+.breachDanger {
+  color: var(--color-semantic-error);
+}
+
+.tariff {
+  font-size: 10px;
+  color: var(--color-ink-subtle);
+  letter-spacing: 0.16px;
+}
+
+.costEstimate {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--color-ink-muted);
+  letter-spacing: 0.16px;
+}
+
+.editRow {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.editInput {
+  width: 60px;
+  padding: 2px 4px;
+  font-size: 12px;
+  background: var(--color-surface-1);
+  border: 1px solid var(--color-primary);
+  color: var(--color-ink);
+  text-align: center;
+}
+
+.editSave {
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  background: var(--color-primary);
+  color: #fff;
+  border: none;
+}
+
+.editCancel {
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  background: none;
+  color: var(--color-ink-muted);
+  border: 1px solid var(--color-hairline);
+}

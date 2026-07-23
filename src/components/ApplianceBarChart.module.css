@@ -1,0 +1,10 @@
+.container {
+  margin-bottom: 24px;
+}
+
+.title {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--color-ink);
+  margin-bottom: 12px;
+}

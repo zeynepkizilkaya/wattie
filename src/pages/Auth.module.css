@@ -1,0 +1,224 @@
+.page {
+  display: grid;
+  grid-template-columns: 3fr 2fr;
+  min-height: 100vh;
+}
+
+.illustrationSide {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background:
+    radial-gradient(ellipse 80% 50% at 50% 100%, color-mix(in srgb, var(--color-primary) 6%, transparent) 0%, transparent 70%),
+    var(--color-surface-1);
+  border-right: 1px solid var(--color-hairline);
+  transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+
+.formSide {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-xl);
+  transition: opacity 0.4s ease, transform 0.4s ease;
+}
+
+.fadeOut {
+  opacity: 0;
+  transform: translateY(-8px);
+}
+
+.themeToggle {
+  position: absolute;
+  top: 24px;
+  right: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  background: var(--color-surface-1);
+  border: 1px solid var(--color-hairline);
+  color: var(--color-ink-muted);
+  cursor: pointer;
+  transition: all 0.15s;
+  z-index: 10;
+}
+
+.themeToggle:hover {
+  color: var(--color-primary);
+  border-color: var(--color-primary);
+  background: var(--color-primary-subtle);
+}
+
+.card {
+  width: 100%;
+  max-width: 360px;
+  animation: formSlideIn 0.35s ease-out both;
+}
+
+.brandRow {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  margin-bottom: var(--space-xxs);
+}
+
+.brandIcon {
+  color: var(--color-primary);
+}
+
+.title {
+  font-size: var(--font-size-headline);
+  font-weight: var(--font-weight-light);
+  color: var(--color-ink);
+}
+
+.subtitle {
+  font-size: var(--font-size-body);
+  color: var(--color-ink-muted);
+  margin-bottom: var(--space-xl);
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xxs);
+}
+
+.label {
+  font-size: var(--font-size-caption);
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: var(--letter-spacing-caption);
+  color: var(--color-ink-muted);
+}
+
+.inputWrapper {
+  position: relative;
+}
+
+.input {
+  padding: 11px var(--space-md);
+  background: var(--color-surface-1);
+  border: none;
+  border-bottom: 1px solid var(--color-hairline);
+  border-radius: var(--radius-none);
+  font-size: var(--font-size-body);
+  color: var(--color-ink);
+  letter-spacing: var(--letter-spacing-body);
+  width: 100%;
+  transition: border-color 0.2s ease, background-color 0.3s ease, color 0.3s ease;
+}
+
+.input::placeholder {
+  color: var(--color-ink-subtle);
+}
+
+.input:focus {
+  outline: none;
+  border-bottom: 2px solid var(--color-primary);
+}
+
+.passwordToggle {
+  position: absolute;
+  right: var(--space-sm);
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  color: var(--color-ink-muted);
+  cursor: pointer;
+  padding: 4px;
+  display: flex;
+  align-items: center;
+}
+
+.passwordToggle:hover {
+  color: var(--color-ink);
+}
+
+.submitBtn {
+  margin-top: var(--space-sm);
+  padding: 14px var(--space-md);
+  background: var(--color-primary);
+  color: var(--color-on-primary);
+  font-size: var(--font-size-body);
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: var(--letter-spacing-body);
+  width: 100%;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.2s ease, transform 0.15s ease;
+}
+
+.submitBtn:hover {
+  background: var(--color-blue-hover);
+}
+
+.submitBtn:active {
+  background: var(--color-blue-80);
+  transform: scale(0.98);
+}
+
+.submitBtn:disabled {
+  background: var(--color-surface-2);
+  color: var(--color-ink-subtle);
+  cursor: not-allowed;
+}
+
+.footer {
+  margin-top: var(--space-lg);
+  font-size: var(--font-size-body-sm);
+  color: var(--color-ink-muted);
+  text-align: center;
+}
+
+.link {
+  color: var(--color-primary);
+  font-weight: var(--font-weight-semibold);
+}
+
+.link:hover {
+  text-decoration: underline;
+}
+
+.formAnimWrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  background: var(--color-canvas);
+  transition: background-color 0.3s ease;
+}
+
+@keyframes formSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 768px) {
+  .page {
+    grid-template-columns: 1fr;
+  }
+
+  .illustrationSide {
+    display: none;
+  }
+
+  .formSide {
+    padding: 24px 16px;
+  }
+}

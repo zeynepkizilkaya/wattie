@@ -1,0 +1,95 @@
+.container {
+  margin-bottom: 16px;
+}
+
+.title {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--color-ink);
+  margin-bottom: 12px;
+}
+
+.timeline {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.entry {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 10px 0;
+  position: relative;
+}
+
+.dot {
+  width: 8px;
+  height: 8px;
+  flex-shrink: 0;
+  margin-top: 4px;
+  position: relative;
+  z-index: 1;
+}
+
+.entry.active .dot {
+  background: var(--color-semantic-error);
+}
+
+.entry.resolved .dot {
+  background: var(--color-semantic-warning);
+}
+
+.line {
+  position: absolute;
+  left: 3px;
+  top: 18px;
+  bottom: -10px;
+  width: 2px;
+  background: var(--color-hairline);
+}
+
+.entry:last-child .line {
+  display: none;
+}
+
+.entryContent {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex: 1;
+}
+
+.entryHeader {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.entryName {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--color-ink);
+}
+
+.statusBadge {
+  font-size: 10px;
+  padding: 1px 6px;
+  font-weight: 600;
+  letter-spacing: 0.16px;
+}
+
+.statusBadge.active {
+  background: var(--color-error-subtle);
+  color: var(--color-semantic-error);
+}
+
+.statusBadge.resolved {
+  background: var(--color-warning-subtle);
+  color: #946200;
+}
+
+.entryDetail {
+  font-size: 11px;
+  color: var(--color-ink-muted);
+}

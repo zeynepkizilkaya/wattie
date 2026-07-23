@@ -1,0 +1,12 @@
+.flash {
+  animation: valueFlash 0.6s ease-out;
+}
+
+@keyframes valueFlash {
+  0% {
+    background-color: var(--color-primary-subtle);
+  }
+  100% {
+    background-color: transparent;
+  }
+}

@@ -1,0 +1,64 @@
+.dialog {
+  border: 1px solid var(--color-hairline);
+  border-radius: var(--radius-none);
+  padding: 0;
+  max-width: 720px;
+  width: 90vw;
+  max-height: 85vh;
+  overflow: hidden;
+  box-shadow: none;
+  margin: auto;
+  position: fixed;
+  inset: 0;
+  height: fit-content;
+  background: var(--color-canvas);
+  color: var(--color-ink);
+  transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease;
+}
+
+.dialog::backdrop {
+  background: rgba(22, 22, 22, 0.5);
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  max-height: 85vh;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-lg);
+  border-bottom: 1px solid var(--color-hairline);
+}
+
+.title {
+  font-size: var(--font-size-card-title);
+  font-weight: var(--font-weight-regular);
+  line-height: var(--line-height-card-title);
+  color: var(--color-ink);
+}
+
+.close {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  background: none;
+  color: var(--color-ink-muted);
+  font-size: var(--font-size-body);
+}
+
+.close:hover {
+  color: var(--color-ink);
+  background: var(--color-surface-1);
+}
+
+.body {
+  padding: var(--space-lg);
+  overflow-y: auto;
+  flex: 1;
+}

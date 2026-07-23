@@ -1,0 +1,36 @@
+.container {
+  margin-bottom: 24px;
+}
+
+.title {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--color-ink);
+  margin-bottom: 8px;
+}
+
+.legend {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 12px;
+}
+
+.legendItem {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  color: var(--color-ink-muted);
+}
+
+.legendDotNight {
+  width: 8px;
+  height: 8px;
+  background: #24a148;
+}
+
+.legendDotDay {
+  width: 8px;
+  height: 8px;
+  background: #0f62fe;
+}

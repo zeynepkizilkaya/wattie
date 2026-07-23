@@ -1,0 +1,229 @@
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  padding: var(--space-lg);
+  background: var(--color-canvas);
+  border: 1px solid var(--color-hairline);
+  border-radius: var(--radius-none);
+  text-align: left;
+  width: 100%;
+  cursor: pointer;
+  transition: background-color 0.3s ease, border-color 0.3s ease, color 0.3s ease, transform 0.15s;
+  animation: cardEnter 0.35s ease-out both;
+}
+
+:global([data-theme="dark"]) .card {
+  background: var(--color-surface-1);
+}
+
+.card:hover {
+  background: var(--color-surface-1);
+  border-color: var(--color-ink-subtle);
+  transform: translateY(-2px);
+}
+
+:global([data-theme="dark"]) .card:hover {
+  background: var(--color-surface-2);
+}
+
+.card:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: -2px;
+}
+
+.normal {}
+
+.warning {
+  border-left: 3px solid var(--color-semantic-warning);
+}
+
+.breach {
+  border-left: 3px solid var(--color-semantic-error);
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-xs);
+  min-width: 0;
+}
+
+.titleRow {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  min-width: 0;
+  overflow: hidden;
+  flex: 1;
+}
+
+.homeIcon {
+  color: var(--color-ink-muted);
+  flex-shrink: 0;
+}
+
+.name {
+  font-size: var(--font-size-body-sm);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-ink);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+
+.heroRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.heroMetric {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-xs);
+}
+
+.healthIndicator {
+  position: relative;
+  width: 32px;
+  height: 32px;
+  flex-shrink: 0;
+}
+
+.healthIndicator svg {
+  display: block;
+}
+
+.healthValue {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  font-weight: var(--font-weight-semibold);
+  line-height: 1;
+}
+
+.heroValue {
+  font-size: 28px;
+  font-weight: var(--font-weight-semibold);
+  line-height: 1;
+  color: var(--color-ink);
+}
+
+.heroLabel {
+  font-size: var(--font-size-caption);
+  color: var(--color-ink-muted);
+  letter-spacing: var(--letter-spacing-caption);
+}
+
+.text_normal {
+  color: var(--color-primary);
+}
+
+.text_warning {
+  color: var(--color-semantic-warning);
+}
+
+.text_breach {
+  color: var(--color-semantic-error);
+}
+
+.quotaBar {
+  height: 8px;
+  background: var(--color-surface-2);
+  border-radius: var(--radius-none);
+  overflow: hidden;
+  border: 1px solid var(--color-hairline);
+}
+
+.quotaFill {
+  height: 100%;
+  transition: width 0.6s ease;
+}
+
+.fill_normal {
+  background: var(--color-primary);
+}
+
+.fill_warning {
+  background: var(--color-semantic-warning);
+}
+
+.fill_breach {
+  background: var(--color-semantic-error);
+}
+
+.metrics {
+  display: flex;
+  gap: var(--space-md);
+  padding-top: var(--space-xs);
+  border-top: 1px solid var(--color-hairline);
+}
+
+.metric {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex: 1;
+  min-width: 0;
+}
+
+.metricLabel {
+  font-size: var(--font-size-caption);
+  letter-spacing: var(--letter-spacing-caption);
+  color: var(--color-ink-muted);
+}
+
+.metricValue {
+  font-size: var(--font-size-body-sm);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-ink);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.anomalyBadge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 16px;
+  height: 16px;
+  padding: 0 4px;
+  font-size: 10px;
+  font-weight: 600;
+  background: var(--color-semantic-error);
+  color: #fff;
+}
+
+.nightBadge {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.32px;
+  padding: 2px 6px;
+  background: var(--color-semantic-success);
+  color: #fff;
+}
+
+@keyframes cardEnter {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 768px) {
+  .metrics {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+}

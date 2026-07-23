@@ -1,0 +1,223 @@
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);
+}
+
+.inlineError {
+  padding: var(--space-sm) var(--space-md);
+  background: var(--color-error-subtle);
+  border-left: 3px solid var(--color-semantic-error);
+  color: var(--color-semantic-error);
+  font-size: var(--font-size-body-sm);
+  letter-spacing: var(--letter-spacing-body);
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xxs);
+}
+
+.label {
+  font-size: var(--font-size-caption);
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: var(--letter-spacing-caption);
+  color: var(--color-ink-muted);
+}
+
+.input {
+  padding: 11px var(--space-md);
+  background: var(--color-surface-1);
+  border: none;
+  border-bottom: 1px solid var(--color-hairline);
+  border-radius: var(--radius-none);
+  font-size: var(--font-size-body);
+  color: var(--color-ink);
+  letter-spacing: var(--letter-spacing-body);
+  width: 100%;
+}
+
+.input:focus {
+  outline: none;
+  border-bottom: 2px solid var(--color-primary);
+}
+
+.inputSmall {
+  composes: input;
+  max-width: 120px;
+}
+
+.appliancesSection {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+.appliancesHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.addBtn {
+  background: none;
+  color: var(--color-primary);
+  font-size: var(--font-size-body-sm);
+  letter-spacing: var(--letter-spacing-body);
+  padding: var(--space-xxs) var(--space-xs);
+}
+
+.addBtn:hover {
+  background: var(--color-surface-1);
+}
+
+.applianceRow {
+  display: flex;
+  gap: var(--space-xs);
+  align-items: flex-end;
+}
+
+.removeBtn {
+  flex-shrink: 0;
+  width: 32px;
+  height: 38px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  color: var(--color-ink-muted);
+  font-size: var(--font-size-body-sm);
+}
+
+.removeBtn:hover {
+  color: var(--color-semantic-error);
+  background: var(--color-surface-1);
+}
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--space-xs);
+  padding-top: var(--space-md);
+  border-top: 1px solid var(--color-hairline);
+}
+
+.cancelBtn {
+  padding: 12px var(--space-md);
+  background: var(--color-canvas);
+  color: var(--color-primary);
+  border: 1px solid var(--color-primary);
+  font-size: var(--font-size-body-sm);
+  letter-spacing: var(--letter-spacing-body);
+}
+
+.cancelBtn:hover {
+  background: var(--color-surface-1);
+}
+
+.submitBtn {
+  padding: 12px var(--space-md);
+  background: var(--color-primary);
+  color: var(--color-on-primary);
+  font-size: var(--font-size-body-sm);
+  letter-spacing: var(--letter-spacing-body);
+}
+
+.submitBtn:hover {
+  background: var(--color-blue-hover);
+}
+
+.submitBtn:active {
+  background: var(--color-blue-80);
+}
+
+.submitBtn:disabled {
+  background: var(--color-surface-2);
+  color: var(--color-ink-subtle);
+  cursor: not-allowed;
+}
+
+.emailField {
+  composes: field;
+}
+
+.presetsSection {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+.presetsLabel {
+  font-size: var(--font-size-caption);
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: var(--letter-spacing-caption);
+  color: var(--color-ink-muted);
+}
+
+.categoryGroup {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xxs);
+}
+
+.categoryName {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.32px;
+  color: var(--color-ink-subtle);
+  text-transform: uppercase;
+  margin-top: var(--space-xs);
+}
+
+.presetGrid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-xxs);
+}
+
+.presetBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 6px 10px;
+  font-size: 12px;
+  letter-spacing: 0.16px;
+  background: var(--color-surface-1);
+  color: var(--color-ink);
+  border: 1px solid var(--color-hairline);
+}
+
+.presetBtn:hover {
+  background: var(--color-surface-2);
+}
+
+.presetBtnActive {
+  background: var(--color-primary);
+  color: var(--color-on-primary);
+  border-color: var(--color-primary);
+}
+
+.presetBtnActive:hover {
+  background: var(--color-blue-hover);
+}
+
+.presetCount {
+  font-size: 10px;
+  font-weight: 600;
+  background: rgba(255,255,255,0.3);
+  padding: 0 4px;
+  border-radius: 0;
+}
+
+.manualSection {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+.manualHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}

@@ -1,0 +1,165 @@
+.row {
+  display: grid;
+  grid-template-columns: 2fr 1.2fr 0.8fr 1fr 1fr 0.6fr;
+  align-items: center;
+  gap: var(--space-md);
+  padding: var(--space-sm) var(--space-lg);
+  background: var(--color-canvas);
+  border: 1px solid var(--color-hairline);
+  border-top: none;
+  text-align: left;
+  width: 100%;
+  cursor: pointer;
+  transition: background-color 0.15s;
+}
+
+.row:first-child {
+  border-top: 1px solid var(--color-hairline);
+}
+
+.row:hover {
+  background: var(--color-surface-1);
+}
+
+.normal {}
+
+.warning {
+  border-left: 3px solid var(--color-semantic-warning);
+}
+
+.breach {
+  border-left: 3px solid var(--color-semantic-error);
+}
+
+.nameCol {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  min-width: 0;
+}
+
+.icon {
+  color: var(--color-ink-muted);
+  flex-shrink: 0;
+}
+
+.name {
+  font-size: var(--font-size-body-sm);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-ink);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.badge {
+  font-size: 10px;
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-semantic-error);
+  background: var(--color-error-subtle);
+  padding: 1px 6px;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.quotaCol {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.quotaValue {
+  font-size: var(--font-size-body-sm);
+  font-weight: var(--font-weight-semibold);
+}
+
+.text_normal {
+  color: var(--color-primary);
+}
+
+.text_warning {
+  color: var(--color-semantic-warning);
+}
+
+.text_breach {
+  color: var(--color-semantic-error);
+}
+
+.miniBar {
+  height: 4px;
+  background: var(--color-surface-2);
+  width: 100%;
+  max-width: 100px;
+}
+
+.miniFill {
+  height: 100%;
+  transition: width 0.6s ease;
+}
+
+.fill_normal {
+  background: var(--color-primary);
+}
+
+.fill_warning {
+  background: var(--color-semantic-warning);
+}
+
+.fill_breach {
+  background: var(--color-semantic-error);
+}
+
+.metricCol {
+  min-width: 0;
+}
+
+.metricValue {
+  font-size: var(--font-size-body-sm);
+  color: var(--color-ink);
+  white-space: nowrap;
+}
+
+.healthCol {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xxs);
+}
+
+.healthDot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.healthValue {
+  font-size: var(--font-size-body-sm);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-ink);
+}
+
+.anomalyBadge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 14px;
+  height: 14px;
+  padding: 0 3px;
+  font-size: 9px;
+  font-weight: 600;
+  background: var(--color-semantic-error);
+  color: #fff;
+  flex-shrink: 0;
+}
+
+@media (max-width: 768px) {
+  .row {
+    grid-template-columns: 2fr 1fr 1fr;
+  }
+
+  .row > :nth-child(3),
+  .row > :nth-child(5),
+  .row > :nth-child(6) {
+    display: none;
+  }
+}

@@ -1,0 +1,77 @@
+.section {
+  margin-bottom: var(--space-xl);
+}
+
+.sectionHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--space-sm);
+}
+
+.sectionTitle {
+  font-size: var(--font-size-body);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-ink);
+}
+
+.sectionIcon {
+  vertical-align: -2px;
+  margin-right: var(--space-xxs);
+  color: var(--color-ink-muted);
+}
+
+.text_breach {
+  color: var(--color-semantic-error);
+}
+
+.billingCard {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  padding: var(--space-lg);
+  background: var(--color-canvas);
+  border: 1px solid var(--color-hairline);
+}
+
+.billingRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.billingLabel {
+  font-size: var(--font-size-body-sm);
+  color: var(--color-ink-muted);
+  letter-spacing: var(--letter-spacing-body);
+}
+
+.billingValue {
+  font-size: var(--font-size-body-sm);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-ink);
+}
+
+.billingCalc {
+  font-size: var(--font-size-body-sm);
+  color: var(--color-ink-muted);
+  font-style: italic;
+}
+
+.billingSeparator {
+  height: 1px;
+  background: var(--color-hairline);
+  margin: var(--space-xs) 0;
+}
+
+.billingTotalLabel {
+  font-size: var(--font-size-body);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-ink);
+}
+
+.billingTotal {
+  font-size: var(--font-size-subhead);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-ink);
+}

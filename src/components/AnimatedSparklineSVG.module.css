@@ -1,0 +1,104 @@
+.container {
+  width: 100%;
+  max-width: 420px;
+  position: relative;
+  z-index: 1;
+  background: var(--color-canvas);
+  border: 1px solid var(--color-hairline);
+  padding: 20px 24px 12px;
+}
+
+.header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+
+.headerLeft {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+}
+
+.headerRight {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+}
+
+.labelValue {
+  font-size: 28px;
+  font-weight: 300;
+  color: var(--color-primary);
+  font-variant-numeric: tabular-nums;
+}
+
+.labelUnit {
+  font-size: 12px;
+  color: var(--color-ink-muted);
+  letter-spacing: 0.16px;
+}
+
+.delta {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--color-semantic-warning);
+}
+
+.deltaLabel {
+  font-size: 11px;
+  color: var(--color-ink-muted);
+}
+
+.svg {
+  width: 100%;
+  height: 100px;
+  overflow: visible;
+}
+
+.gridLine {
+  stroke: var(--color-hairline);
+  stroke-width: 0.5;
+  stroke-dasharray: 4 4;
+}
+
+.line1 {
+  fill: none;
+  stroke: var(--color-primary);
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  transition: d 0.8s ease-in-out;
+}
+
+.fill {
+  fill: var(--color-primary);
+  opacity: 0.06;
+  transition: d 0.8s ease-in-out;
+}
+
+:global([data-theme="dark"]) .fill {
+  opacity: 0.14;
+}
+
+.xAxis {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 6px;
+  font-size: 10px;
+  color: var(--color-ink-muted);
+  letter-spacing: 0.16px;
+}
+
+.deltaUp {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--color-semantic-warning);
+}
+
+.deltaDown {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--color-semantic-success);
+}
