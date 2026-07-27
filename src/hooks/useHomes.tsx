@@ -202,15 +202,30 @@ export function HomesProvider({ children }: { children: React.ReactNode }) {
 
   const getHome = useCallback((id: string) => homes.find((h) => h.id === id), [homes])
 
-  // Real Appliance Removal Action Function
+  // Real Appliance Removal Action Function — recalculates home aggregates immediately
   const removeAppliance = useCallback((homeId: string, applianceId: string) => {
     setHomes((prev) =>
       prev.map((h) => {
         if (h.id !== homeId) return h
+        const removedApp = h.appliances.find((a) => a.id === applianceId)
         const updatedApps = h.appliances.filter((a) => a.id !== applianceId)
+
+        // Recalculate: subtract removed device's proportional kWh contribution
+        const oldTotalWatt = h.appliances.reduce((s, a) => s + a.currentWatt, 0)
+        const removedWatt = removedApp?.currentWatt ?? 0
+        const removedRatio = oldTotalWatt > 0 ? removedWatt / oldTotalWatt : 0
+        const newTotalKwh = Math.max(0, h.totalConsumptionKwh * (1 - removedRatio))
+
+        const quotaPercent = h.powerQuotaKwh > 0 ? (newTotalKwh / h.powerQuotaKwh) * 100 : 0
+        const tiered = calculateTieredBilling(newTotalKwh, quotaPercent)
+
         return {
           ...h,
           appliances: updatedApps,
+          totalConsumptionKwh: newTotalKwh,
+          quotaUsagePercent: quotaPercent,
+          billingAmountTry: tiered.totalBill,
+          penaltyActive: quotaPercent >= 100,
         }
       })
     )
