@@ -22,10 +22,22 @@ const HomesContext = createContext<HomesContextValue | null>(null)
 
 // 1.5 Second Real-Time Telemetry Stream Polling Interval
 const POLL_INTERVAL = 1500
+const STORAGE_KEY = 'wattie_homes'
+
+function loadHomesFromStorage(): Home[] {
+  try {
+    const stored = localStorage.getItem(STORAGE_KEY)
+    if (stored) {
+      const parsed = JSON.parse(stored) as Home[]
+      if (Array.isArray(parsed) && parsed.length > 0) return parsed
+    }
+  } catch { /* ignore parse errors */ }
+  return mockHomes
+}
 
 export function HomesProvider({ children }: { children: React.ReactNode }) {
   const { addToast } = useToast()
-  const [homes, setHomes] = useState<Home[]>(mockHomes)
+  const [homes, setHomes] = useState<Home[]>(loadHomesFromStorage)
   const [loading, setLoading] = useState(true)
   const [lastUpdated, setLastUpdated] = useState<number | null>(() => Date.now())
   const [isStale, setIsStale] = useState(false)
@@ -34,6 +46,11 @@ export function HomesProvider({ children }: { children: React.ReactNode }) {
   const errorsRef = useRef(0)
   const errorShownRef = useRef(false)
   const initializedRef = useRef(false)
+
+  // Persist homes to localStorage on every change
+  useEffect(() => {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(homes))
+  }, [homes])
 
   // Full fetch: homes + appliances (initial load and refetch)
   const fetchAll = useCallback(async () => {
