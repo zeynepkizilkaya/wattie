@@ -12,6 +12,7 @@ interface HomesContextValue {
   lastUpdated: number | null
   getHome: (id: string) => Home | undefined
   refetch: () => Promise<void>
+  addHome: (name: string, contactEmail: string, appliances: { name: string; safeLimitWatts: number }[]) => void
   removeAppliance: (homeId: string, applianceId: string) => void
   removeApplianceByName: (homeQuery: string, applianceQuery: string) => { success: boolean; homeName?: string; applianceName?: string }
   deleteHome: (homeId: string) => void
@@ -251,6 +252,42 @@ export function HomesProvider({ children }: { children: React.ReactNode }) {
     setHomes((prev) => prev.filter((h) => h.id !== homeId))
   }, [])
 
+  // Mock Add Home Function — creates a new home locally with demo telemetry
+  const addHome = useCallback((name: string, contactEmail: string, appliances: { name: string; safeLimitWatts: number }[]) => {
+    const newId = `mock-${Date.now()}`
+    const newAppliances: Home['appliances'] = appliances.map((a, i) => ({
+      id: `${newId}-app-${i}`,
+      name: a.name,
+      safeLimit: a.safeLimitWatts,
+      currentWatt: Math.round(a.safeLimitWatts * (0.3 + Math.random() * 0.5)),
+      consecutiveBreaches: 0,
+    }))
+
+    const totalWatt = newAppliances.reduce((s, a) => s + a.currentWatt, 0)
+    const totalKwh = totalWatt * 0.72 // simulated ~0.72 hours of usage
+    const quotaKwh = 500
+    const quotaPercent = (totalKwh / quotaKwh) * 100
+    const tiered = calculateTieredBilling(totalKwh, quotaPercent)
+
+    const newHome: Home = {
+      id: newId,
+      name,
+      contactEmail,
+      powerQuotaKwh: quotaKwh,
+      financialQuota: 1000,
+      normalTariffRate: 2.5,
+      penaltyTariffRate: 5.0,
+      quotaUsagePercent: quotaPercent,
+      totalConsumptionKwh: totalKwh,
+      billingAmountTry: tiered.totalBill,
+      penaltyActive: quotaPercent >= 100,
+      appliances: newAppliances,
+      createdAt: new Date().toISOString(),
+    }
+
+    setHomes((prev) => [...prev, newHome])
+  }, [])
+
   const value: HomesContextValue = {
     homes,
     loading,
@@ -258,6 +295,7 @@ export function HomesProvider({ children }: { children: React.ReactNode }) {
     lastUpdated,
     getHome,
     refetch: fetchAll,
+    addHome,
     removeAppliance,
     removeApplianceByName,
     deleteHome,

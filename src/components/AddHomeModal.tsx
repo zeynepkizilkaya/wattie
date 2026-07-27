@@ -1,7 +1,7 @@
 import { useCallback, useState } from 'react'
 import { Modal } from './Modal'
 import { useToast } from '@/hooks/useToast'
-import { api } from '@/services/api'
+import { useHomes } from '@/hooks/useHomes'
 import styles from './AddHomeModal.module.css'
 
 interface ApplianceInput {
@@ -43,6 +43,7 @@ function createEmptyAppliance(): ApplianceInput {
 
 export function AddHomeModal({ open, onClose }: AddHomeModalProps) {
   const { addToast } = useToast()
+  const { addHome } = useHomes()
   const [homeName, setHomeName] = useState('')
   const [email, setEmail] = useState('')
   const [presetCounts, setPresetCounts] = useState<Record<string, number>>({})
@@ -131,15 +132,7 @@ export function AddHomeModal({ open, onClose }: AddHomeModalProps) {
 
     setSubmitting(true)
     try {
-      await api.createHome({
-        name: homeName.trim(),
-        contactEmail: email.trim(),
-        powerQuotaKwh: 500,
-        financialQuota: 1000,
-        normalTariffRate: 2.5,
-        penaltyTariffRate: 5.0,
-        appliances: allAppliances,
-      })
+      addHome(homeName.trim(), email.trim(), allAppliances)
       addToast('Konut başarıyla kaydedildi.', 'success')
       resetForm()
       onClose()
