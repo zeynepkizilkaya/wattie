@@ -850,7 +850,7 @@ export function HousePage() {
             </div>
 
             <button
-              onClick={() => navigate('/')}
+              onClick={() => navigate('/dashboard')}
               style={{
                 display: 'inline-flex',
                 alignItems: 'center',
