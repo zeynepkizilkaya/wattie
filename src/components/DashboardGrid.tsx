@@ -1,3 +1,4 @@
+import { memo } from 'react'
 import { Home } from 'lucide-react'
 import { type Home as HomeType } from '@/types/home'
 import { HomeCard } from './HomeCard'
@@ -14,7 +15,7 @@ interface DashboardGridProps {
   viewMode?: ViewMode
 }
 
-export function DashboardGrid({ homes, loading, onHomeClick, viewMode = 'grid' }: DashboardGridProps) {
+export const DashboardGrid = memo(function DashboardGrid({ homes, loading, onHomeClick, viewMode = 'grid' }: DashboardGridProps) {
   if (loading && homes.length === 0) {
     return (
       <div className={styles.grid}>
@@ -80,4 +81,4 @@ export function DashboardGrid({ homes, loading, onHomeClick, viewMode = 'grid' }
       ))}
     </div>
   )
-}
+})

@@ -1,36 +1,66 @@
 export interface Appliance {
   id: string
   name: string
-  currentWatt: number
+  type?: string
   safeLimit: number
+  currentWatt: number
   consecutiveBreaches: number
+  createdAt?: string
 }
 
 export interface Home {
   id: string
   name: string
+  address?: string
   contactEmail?: string
+  powerQuotaKwh: number
+  financialQuota: number
+  normalTariffRate: number
+  penaltyTariffRate: number
   quotaUsagePercent: number
   totalConsumptionKwh: number
   billingAmountTry: number
   penaltyActive: boolean
   appliances: Appliance[]
+  createdAt?: string
+}
+
+export interface HomeStatus {
+  homeId: number
+  totalKwh: number
+  totalCost: number
+  penaltyActive: boolean
 }
 
 export interface DailyConsumption {
   date: string
-  consumptionKwh: number
+  totalKwh: number
+  totalCost: number
 }
 
 export interface CreateHomeRequest {
   name: string
-  email: string
-  appliances: { name: string; safeLimit: number }[]
+  address?: string
+  contactEmail: string
+  powerQuotaKwh: number
+  financialQuota: number
+  normalTariffRate: number
+  penaltyTariffRate: number
+  appliances: { name: string; type?: string; safeLimitWatts: number }[]
 }
 
 export interface AddApplianceRequest {
   name: string
-  safeLimit: number
+  type?: string
+  safeLimitWatts: number
+}
+
+export interface EventLog {
+  id: string
+  eventType: 'QUOTA_80' | 'QUOTA_100' | 'PENALTY_ACTIVATED' | 'ANOMALY_DETECTED'
+  details: string
+  aiRecommendation?: string
+  createdAt: string
 }
 
 export interface Notification {

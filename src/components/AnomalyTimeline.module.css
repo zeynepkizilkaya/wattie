@@ -86,7 +86,7 @@
 
 .statusBadge.resolved {
   background: var(--color-warning-subtle);
-  color: #946200;
+  color: var(--color-semantic-warning);
 }
 
 .entryDetail {

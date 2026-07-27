@@ -29,7 +29,7 @@ export function AddApplianceForm({ homeId }: AddApplianceFormProps) {
     try {
       await api.addAppliance(homeId, {
         name: name.trim(),
-        safeLimit,
+        safeLimitWatts: safeLimit,
       })
       addToast('Cihaz başarıyla eklendi.', 'success')
       setName('')
@@ -49,6 +49,7 @@ export function AddApplianceForm({ homeId }: AddApplianceFormProps) {
         value={name}
         onChange={(e) => setName(e.target.value)}
         placeholder="Yeni cihaz adı"
+        aria-label="Cihaz adı"
       />
       <input
         className={styles.inputSmall}
@@ -57,6 +58,7 @@ export function AddApplianceForm({ homeId }: AddApplianceFormProps) {
         onChange={(e) => setLimit(e.target.value)}
         placeholder="Limit (W)"
         min="0"
+        aria-label="Güç limiti (Watt)"
       />
       <button type="submit" className={styles.submitBtn} disabled={submitting}>
         {submitting ? '...' : '+ Ekle'}

@@ -50,8 +50,9 @@ export function AppliancePieChart({ appliances }: AppliancePieChartProps) {
               outerRadius={100}
               dataKey="value"
               nameKey="name"
-              paddingAngle={2}
+              paddingAngle={0}
               stroke="none"
+              strokeWidth={0}
               isAnimationActive={false}
             >
               {data.map((entry, index) => (

@@ -107,12 +107,12 @@ export function AddHomeModal({ open, onClose }: AddHomeModalProps) {
     }
 
     // Build preset appliances from counts
-    const presetAppliances: { name: string; safeLimit: number }[] = []
+    const presetAppliances: { name: string; safeLimitWatts: number }[] = []
     for (const [presetName, count] of Object.entries(presetCounts)) {
       const preset = APPLIANCE_PRESETS.find((p) => p.name === presetName)
       if (preset) {
         for (let i = 0; i < count; i++) {
-          presetAppliances.push({ name: preset.name, safeLimit: preset.safeLimit })
+          presetAppliances.push({ name: preset.name, safeLimitWatts: preset.safeLimit })
         }
       }
     }
@@ -120,7 +120,7 @@ export function AddHomeModal({ open, onClose }: AddHomeModalProps) {
     // Build manual appliances
     const validManualAppliances = appliances
       .filter((a) => a.name.trim() && a.safeLimit.trim())
-      .map((a) => ({ name: a.name.trim(), safeLimit: Number(a.safeLimit) }))
+      .map((a) => ({ name: a.name.trim(), safeLimitWatts: Number(a.safeLimit) }))
 
     const allAppliances = [...presetAppliances, ...validManualAppliances]
 
@@ -133,7 +133,11 @@ export function AddHomeModal({ open, onClose }: AddHomeModalProps) {
     try {
       await api.createHome({
         name: homeName.trim(),
-        email: email.trim(),
+        contactEmail: email.trim(),
+        powerQuotaKwh: 500,
+        financialQuota: 1000,
+        normalTariffRate: 2.5,
+        penaltyTariffRate: 5.0,
         appliances: allAppliances,
       })
       addToast('Konut başarıyla kaydedildi.', 'success')
@@ -165,6 +169,7 @@ export function AddHomeModal({ open, onClose }: AddHomeModalProps) {
             value={homeName}
             onChange={(e) => setHomeName(e.target.value)}
             placeholder="Örn: Ev - Kadıköy"
+            maxLength={100}
           />
         </div>
 
@@ -177,6 +182,7 @@ export function AddHomeModal({ open, onClose }: AddHomeModalProps) {
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             placeholder="ornek@mail.com"
+            maxLength={254}
           />
         </div>
 
@@ -236,6 +242,7 @@ export function AddHomeModal({ open, onClose }: AddHomeModalProps) {
                 value={appliance.name}
                 onChange={(e) => updateAppliance(appliance.key, 'name', e.target.value)}
                 placeholder="Cihaz adı"
+                maxLength={80}
               />
               <input
                 className={styles.inputSmall}
@@ -244,6 +251,7 @@ export function AddHomeModal({ open, onClose }: AddHomeModalProps) {
                 onChange={(e) => updateAppliance(appliance.key, 'safeLimit', e.target.value)}
                 placeholder="Limit (W)"
                 min="0"
+                max="50000"
               />
               {appliances.length > 1 && (
                 <button

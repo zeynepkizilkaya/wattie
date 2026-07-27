@@ -38,9 +38,29 @@ export function HourlyConsumptionChart({ data }: HourlyConsumptionChartProps) {
             unit=" Wh"
           />
           <Tooltip
-            contentStyle={{ border: '1px solid var(--color-hairline)', borderRadius: '0px', fontSize: '13px' }}
-            formatter={(value: unknown) => [`${Number(value).toFixed(0)} Wh`, 'Tüketim']}
-            labelFormatter={(h: unknown) => `${String(h).padStart(2, '0')}:00`}
+            cursor={{ fill: 'rgba(15, 98, 254, 0.12)' }}
+            content={({ active, payload, label }) => {
+              if (!active || !payload || !payload.length || !payload[0]) return null
+              const hourStr = `${String(label).padStart(2, '0')}:00`
+              const val = payload[0].value
+              return (
+                <div style={{
+                  background: 'var(--color-surface-1)',
+                  border: '1px solid var(--color-hairline)',
+                  borderRadius: '0px',
+                  padding: '8px 12px',
+                  boxShadow: '0 10px 25px rgba(0,0,0,0.5)',
+                  fontSize: '12px',
+                  color: 'var(--color-ink)'
+                }}>
+                  <div style={{ fontWeight: 600, color: 'var(--color-ink)', marginBottom: '4px' }}>Saat: {hourStr}</div>
+                  <div style={{ color: 'var(--color-ink-muted)', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                    <span>Tüketim:</span>
+                    <strong style={{ color: 'var(--color-primary)', fontFamily: 'monospace' }}>{Number(val).toFixed(0)} Wh</strong>
+                  </div>
+                </div>
+              )
+            }}
           />
           <ReferenceLine x={6} stroke="var(--color-semantic-warning)" strokeDasharray="3 3" strokeWidth={1} />
           <ReferenceLine x={22} stroke="var(--color-semantic-warning)" strokeDasharray="3 3" strokeWidth={1} />

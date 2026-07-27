@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react'
 import { type Appliance } from '@/types/home'
 import { getApplianceIcon } from '@/utils/applianceIcons'
 import styles from './AnomalyTimeline.module.css'
@@ -11,20 +12,46 @@ interface TimelineEntry {
   applianceName: string
   status: 'active' | 'resolved'
   breaches: number
+  startTimeMs: number
   timestamp: string
 }
 
+// Persistent store for real-time anomaly start timestamps
+const anomalyStartMap: Record<string, number> = {}
+
 export function AnomalyTimeline({ appliances }: AnomalyTimelineProps) {
+  const [now, setNow] = useState(() => Date.now())
+
+  useEffect(() => {
+    const timer = setInterval(() => setNow(Date.now()), 10000)
+    return () => clearInterval(timer)
+  }, [])
+
   const entries: TimelineEntry[] = appliances
-    .filter(a => a.consecutiveBreaches > 0)
-    .sort((a, b) => b.consecutiveBreaches - a.consecutiveBreaches)
-    .map(a => ({
-      applianceId: a.id,
-      applianceName: a.name,
-      status: a.consecutiveBreaches >= 3 ? 'active' : 'resolved',
-      breaches: a.consecutiveBreaches,
-      timestamp: getRelativeTime(a.consecutiveBreaches),
-    }))
+    .filter(a => a.consecutiveBreaches > 0 || (a.safeLimit > 0 && a.currentWatt > a.safeLimit))
+    .map(a => {
+      if (!anomalyStartMap[a.id]) {
+        // Set realistic initial start time: fewer breaches = started more recently
+        const initialOffsetMins = Math.max(1, (6 - Math.min(a.consecutiveBreaches || 1, 5)) * 3)
+        anomalyStartMap[a.id] = Date.now() - initialOffsetMins * 60000
+      }
+
+      const startTimeMs = anomalyStartMap[a.id] || Date.now()
+      const elapsedMins = Math.max(1, Math.floor((now - startTimeMs) / 60000))
+      const timeStr = elapsedMins < 60 ? `~${elapsedMins} dk önce başladı` : `~${Math.floor(elapsedMins / 60)} saat önce başladı`
+      const status: 'active' | 'resolved' = (a.consecutiveBreaches >= 3 || (a.safeLimit > 0 && a.currentWatt > a.safeLimit)) ? 'active' : 'resolved'
+
+      return {
+        applianceId: a.id,
+        applianceName: a.name,
+        status,
+        breaches: a.consecutiveBreaches || 1,
+        startTimeMs,
+        timestamp: timeStr,
+      }
+    })
+    // Sort strictly newest anomaly first (highest startTimeMs / most recent start at the top)
+    .sort((a, b) => b.startTimeMs - a.startTimeMs)
 
   if (entries.length === 0) return null
 
@@ -56,11 +83,4 @@ export function AnomalyTimeline({ appliances }: AnomalyTimelineProps) {
       </div>
     </div>
   )
-}
-
-function getRelativeTime(breaches: number): string {
-  const minutes = breaches * 2
-  if (minutes < 60) return `~${minutes} dk önce başladı`
-  const hours = Math.floor(minutes / 60)
-  return `~${hours} saat önce başladı`
 }

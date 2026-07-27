@@ -40,15 +40,32 @@ export function ConsumptionChart({ data }: ConsumptionChartProps) {
             unit=" kWh"
           />
           <Tooltip
-            contentStyle={{
-              border: '1px solid var(--color-hairline)',
-              borderRadius: '0px',
-              fontSize: '14px',
+            cursor={{ stroke: 'var(--color-primary)', strokeDasharray: '3 3', strokeWidth: 1.5 }}
+            content={({ active, payload, label }) => {
+              if (!active || !payload || !payload.length || !payload[0]) return null
+              const val = payload[0].value
+              return (
+                <div style={{
+                  background: 'var(--color-surface-1)',
+                  border: '1px solid var(--color-hairline)',
+                  borderRadius: '0px',
+                  padding: '8px 12px',
+                  boxShadow: '0 10px 25px rgba(0,0,0,0.5)',
+                  fontSize: '12px',
+                  color: 'var(--color-ink)'
+                }}>
+                  <div style={{ fontWeight: 600, color: 'var(--color-ink)', marginBottom: '4px' }}>{label}</div>
+                  <div style={{ color: 'var(--color-ink-muted)', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                    <span>Tüketim (kWh):</span>
+                    <strong style={{ color: 'var(--color-primary)', fontFamily: 'monospace' }}>{val} kWh</strong>
+                  </div>
+                </div>
+              )
             }}
           />
           <Area
             type="monotone"
-            dataKey="consumptionKwh"
+            dataKey="totalKwh"
             stroke="#0f62fe"
             fill="#0f62fe"
             fillOpacity={0.08}

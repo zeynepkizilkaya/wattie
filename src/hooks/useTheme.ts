@@ -22,21 +22,13 @@ export function useTheme() {
   }, [])
 
   const toggleTheme = useCallback(() => {
-    const next = theme === 'light' ? 'dark' : 'light'
-
-    const switchTheme = () => {
+    setThemeState((prev) => {
+      const next = prev === 'light' ? 'dark' : 'light'
       applyTheme(next)
       localStorage.setItem('theme', next)
-      setThemeState(next)
-    }
-
-    // View Transitions API — cross-fades the entire page as one unit
-    if (document.startViewTransition) {
-      document.startViewTransition(switchTheme)
-    } else {
-      switchTheme()
-    }
-  }, [theme])
+      return next
+    })
+  }, [])
 
   return { theme, toggleTheme }
 }

@@ -36,6 +36,8 @@ export function CostBreakdownChart({ home }: CostBreakdownChartProps) {
               innerRadius={60}
               outerRadius={100}
               dataKey="value"
+              paddingAngle={0}
+              stroke="none"
               strokeWidth={0}
               isAnimationActive={false}
             >
@@ -44,8 +46,27 @@ export function CostBreakdownChart({ home }: CostBreakdownChartProps) {
               ))}
             </Pie>
             <Tooltip
-              contentStyle={{ border: '1px solid var(--color-hairline)', borderRadius: '0px', fontSize: '13px' }}
-              formatter={(value: unknown) => [`${Number(value).toFixed(2)} ₺`]}
+              content={({ active, payload }) => {
+                if (!active || !payload || !payload.length || !payload[0]) return null
+                const item = payload[0].payload || {}
+                return (
+                  <div style={{
+                    background: 'var(--color-surface-1)',
+                    border: '1px solid var(--color-hairline)',
+                    borderRadius: '0px',
+                    padding: '8px 12px',
+                    boxShadow: '0 10px 25px rgba(0,0,0,0.5)',
+                    fontSize: '12px',
+                    color: 'var(--color-ink)'
+                  }}>
+                    <div style={{ fontWeight: 600, color: 'var(--color-ink)', marginBottom: '4px' }}>{item.name}</div>
+                    <div style={{ color: 'var(--color-ink-muted)', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                      <span>Tutar:</span>
+                      <strong style={{ color: item.color || 'var(--color-primary)', fontFamily: 'monospace' }}>₺{Number(item.value).toFixed(2)} TL</strong>
+                    </div>
+                  </div>
+                )
+              }}
             />
           </PieChart>
         </ResponsiveContainer>

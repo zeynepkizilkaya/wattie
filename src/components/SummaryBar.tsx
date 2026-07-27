@@ -1,3 +1,4 @@
+import { memo } from 'react'
 import { Home, AlertTriangle, AlertOctagon, Zap, Activity } from 'lucide-react'
 import { type Home as HomeType } from '@/types/home'
 import { getQuotaState } from '@/utils/quota'
@@ -8,7 +9,7 @@ interface SummaryBarProps {
   homes: HomeType[]
 }
 
-export function SummaryBar({ homes }: SummaryBarProps) {
+export const SummaryBar = memo(function SummaryBar({ homes }: SummaryBarProps) {
   const totalHomes = homes.length
   const totalKwh = homes.reduce((sum, h) => sum + h.totalConsumptionKwh, 0)
   const totalWatt = homes.reduce((sum, h) =>
@@ -70,4 +71,4 @@ export function SummaryBar({ homes }: SummaryBarProps) {
       </div>
     </div>
   )
-}
+})

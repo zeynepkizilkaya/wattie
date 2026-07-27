@@ -1,0 +1,184 @@
+.container {
+  position: relative;
+  display: inline-block;
+  min-width: 260px;
+  user-select: none;
+  font-family: inherit;
+}
+
+/* IBM Carbon Dropdown Trigger Field */
+.trigger {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  height: 40px;
+  padding: 0 16px;
+  background: var(--color-surface-1);
+  color: var(--color-ink);
+  border: 1px solid var(--color-hairline);
+  border-bottom: 2px solid var(--color-hairline-strong);
+  border-radius: 0px; /* Classic IBM Carbon sharp corners */
+  font-size: 14px;
+  font-weight: 400;
+  cursor: pointer;
+  outline: none;
+}
+
+.trigger:hover {
+  background: var(--color-surface-2);
+  border-bottom-color: var(--color-primary);
+}
+
+.triggerOpen,
+.trigger:focus-visible {
+  border-color: var(--color-primary) !important; /* IBM Carbon Blue Focus Ring */
+  outline: 2px solid var(--color-primary);
+  outline-offset: -2px;
+}
+
+.triggerLeft {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  overflow: hidden;
+}
+
+.homeIcon {
+  color: var(--color-primary);
+  flex-shrink: 0;
+}
+
+.triggerName {
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+
+/* Arrow Wrapper shifted inwards/leftwards from the edge */
+.arrowWrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: 12px;
+  margin-right: 8px;
+  padding-left: 8px;
+  border-left: 1px solid var(--color-hairline);
+}
+
+.arrow {
+  color: var(--color-ink-muted);
+}
+
+.arrowRotated {
+  transform: rotate(180deg);
+  color: var(--color-primary);
+}
+
+/* IBM Carbon Dropdown Popover List */
+.menu {
+  position: absolute;
+  top: calc(100% + 2px);
+  left: 0;
+  right: 0;
+  z-index: 999;
+  margin: 0;
+  padding: 4px 0;
+  list-style: none;
+  background: var(--color-surface-1);
+  border: 1px solid var(--color-hairline);
+  border-radius: 0px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+  max-height: 280px;
+  overflow-y: auto;
+  animation: carbonDropdownSlide 0.18s cubic-bezier(0, 0, 0.38, 0.9);
+}
+
+@keyframes carbonDropdownSlide {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.menuItem {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 40px;
+  padding: 0 16px;
+  color: var(--color-ink);
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.menuItem:hover {
+  background: var(--color-primary-subtle);
+  color: var(--color-primary);
+}
+
+.selectedItem {
+  background: var(--color-surface-2);
+  font-weight: 600;
+}
+
+.itemLeft {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.activeBar {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 4px;
+  background: #0f62fe; /* IBM Carbon Blue active strip */
+}
+
+.itemHomeIcon {
+  color: var(--color-ink-muted, #a8a8a8);
+}
+
+.selectedItem .itemHomeIcon {
+  color: #0f62fe;
+}
+
+.itemName {
+  white-space: nowrap;
+}
+
+/* IBM Carbon Tag Style for Quota Badge */
+.quotaTag {
+  font-size: 11px;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: 0px; /* Sharp Carbon tag */
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+
+.quotaNormal {
+  background: rgba(36, 161, 72, 0.15);
+  color: #24a148;
+  border: 1px solid rgba(36, 161, 72, 0.4);
+}
+
+.quotaOver {
+  background: rgba(218, 30, 40, 0.15);
+  color: #da1e28;
+  border: 1px solid rgba(218, 30, 40, 0.4);
+}
+
+.checkIcon {
+  color: #0f62fe;
+  flex-shrink: 0;
+}

@@ -1,7 +1,10 @@
-import { useCallback, useEffect, useRef, useState, lazy, Suspense } from 'react'
+import { useEffect, useRef, useState, lazy, Suspense, useCallback } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { Box } from 'lucide-react'
 import { api } from '@/services/api'
 import { type Home, type DailyConsumption, type Recommendation } from '@/types/home'
-import { usePolling } from '@/hooks/usePolling'
+import { generateHistory } from '@/mocks/data'
+import { useHomes } from '@/hooks/useHomes'
 import { useToast } from '@/hooks/useToast'
 import { getQuotaState } from '@/utils/quota'
 import { AddApplianceForm } from './AddApplianceForm'
@@ -43,20 +46,19 @@ export function HomeDetailModal({ homeId, initialHome, open, onClose }: HomeDeta
   const onCloseRef = useRef(onClose)
   onCloseRef.current = onClose
 
+  const navigate = useNavigate()
   const { addToast } = useToast()
+  const { getHome, lastUpdated } = useHomes()
 
-  const [home, setHome] = useState<Home | null>(initialHome ?? null)
+  const home = getHome(homeId) ?? initialHome ?? null
   const [history, setHistory] = useState<DailyConsumption[]>([])
   const [hourlyData, setHourlyData] = useState<Array<{ hour: number; consumptionWh: number }>>([])
   const [recommendations, setRecommendations] = useState<Recommendation[]>([])
-  const [lastUpdated, setLastUpdated] = useState<number | null>(null)
 
   useEffect(() => {
-    setHome(initialHome ?? null)
     setHistory([])
     setHourlyData([])
     setRecommendations([])
-    setLastUpdated(null)
   }, [homeId])
 
   // Dialog open/close management
@@ -68,6 +70,20 @@ export function HomeDetailModal({ homeId, initialHome, open, onClose }: HomeDeta
       dialog.showModal()
     } else if (!open && dialog.open) {
       dialog.close()
+    }
+  }, [open])
+
+  useEffect(() => {
+    if (open) {
+      document.documentElement.style.overflow = 'hidden'
+      document.body.style.overflow = 'hidden'
+    } else {
+      document.documentElement.style.overflow = ''
+      document.body.style.overflow = ''
+    }
+    return () => {
+      document.documentElement.style.overflow = ''
+      document.body.style.overflow = ''
     }
   }, [open])
 
@@ -84,50 +100,48 @@ export function HomeDetailModal({ homeId, initialHome, open, onClose }: HomeDeta
   useEffect(() => {
     if (!open) return
 
-    api.getHomeHistory(homeId).then(setHistory).catch(() => {
-      addToast('Geçmiş veriler yüklenemedi.', 'error')
+    api.getHomeTrend(homeId).then(data => {
+      if (data && data.length > 0) {
+        setHistory(data)
+        setHourlyData(data.map((d, i) => ({ hour: i, consumptionWh: d.totalKwh * 1000 })))
+      } else {
+        const mockHist = generateHistory(homeId)
+        setHistory(mockHist.map(h => ({ date: h.date || '', totalKwh: h.consumptionKwh, totalCost: h.consumptionKwh * 2.45 })))
+        setHourlyData(mockHist.map((h, i) => ({ hour: i, consumptionWh: h.consumptionKwh * 100 })))
+      }
+    }).catch(() => {
+      const mockHist = generateHistory(homeId)
+      setHistory(mockHist.map(h => ({ date: h.date || '', totalKwh: h.consumptionKwh, totalCost: h.consumptionKwh * 2.45 })))
+      setHourlyData(mockHist.map((h, i) => ({ hour: i, consumptionWh: h.consumptionKwh * 100 })))
     })
-
-    api.getHomeHourly(homeId).then(setHourlyData).catch(() => {})
-  }, [homeId, open, addToast])
+  }, [homeId, open])
 
   // Fetch recommendations once on mount (when open)
   useEffect(() => {
     if (!open) return
 
-    api.getRecommendations(homeId).then(setRecommendations).catch(() => {
-      // Recommendations are optional, silent fail
-    })
+    api.getHomeEvents(homeId).then(events => {
+      setRecommendations(events
+        .filter(e => e.aiRecommendation)
+        .map(e => ({
+          id: e.id,
+          homeId,
+          type: 'general' as const,
+          title: e.eventType,
+          message: e.aiRecommendation || e.details,
+          createdAt: e.createdAt,
+        }))
+      )
+    }).catch(() => {})
   }, [homeId, open, addToast])
 
-  // Poll live data
-  const pollCallback = useCallback(async () => {
-    if (!open) return
-    try {
-      const response = await api.getHomes(0, 100)
-      const found = response.content.find(h => h.id === homeId)
-      if (found) {
-        setHome(found)
-        setLastUpdated(Date.now())
-      }
-    } catch {
-      // Polling errors are non-critical, skip toast to avoid spam
-    }
-  }, [homeId, open])
-
-  usePolling(pollCallback, 2000)
 
   // Delete home
   const [confirmDelete, setConfirmDelete] = useState(false)
 
   const handleDeleteHome = async () => {
-    try {
-      await api.deleteHome(homeId)
-      addToast('Konut silindi.', 'success')
-      onClose()
-    } catch {
-      addToast('Konut silinirken bir hata oluştu.', 'error')
-    }
+    addToast('Konut silme özelliği henüz desteklenmiyor.', 'error')
+    setConfirmDelete(false)
   }
 
   // Remove appliance handler
@@ -139,24 +153,13 @@ export function HomeDetailModal({ homeId, initialHome, open, onClose }: HomeDeta
 
   const confirmRemoveAppliance = useCallback(async () => {
     if (!pendingRemoveAppliance) return
-    try {
-      await api.removeAppliance(homeId, pendingRemoveAppliance)
-      addToast('Cihaz kaldırıldı.', 'success')
-    } catch {
-      addToast('Cihaz kaldırılamadı.', 'error')
-    }
+    addToast('Cihaz kaldırma özelliği henüz desteklenmiyor.', 'error')
     setPendingRemoveAppliance(null)
-  }, [homeId, pendingRemoveAppliance, addToast])
+  }, [pendingRemoveAppliance, addToast])
 
-  // Update appliance limit handler
-  const handleUpdateLimit = useCallback(async (applianceId: string, newLimit: number) => {
-    try {
-      await api.updateAppliance(homeId, applianceId, { safeLimit: newLimit })
-      addToast('Cihaz limiti güncellendi.', 'success')
-    } catch {
-      addToast('Limit güncellenemedi.', 'error')
-    }
-  }, [homeId, addToast])
+  const handleUpdateLimit = useCallback(async (_applianceId: string, _newLimit: number) => {
+    addToast('Limit güncelleme özelliği henüz desteklenmiyor.', 'error')
+  }, [addToast])
 
   // Backdrop click
   const handleBackdropClick = (e: React.MouseEvent) => {
@@ -181,15 +184,27 @@ export function HomeDetailModal({ homeId, initialHome, open, onClose }: HomeDeta
 
   return (
     <>
-    <dialog ref={dialogRef} className={styles.dialog} onClick={handleBackdropClick}>
+    <dialog ref={dialogRef} className={styles.dialog} onClick={handleBackdropClick} aria-labelledby="home-detail-title">
       <div className={styles.content}>
         <header className={styles.header}>
           <div className={styles.headerLeft}>
-            <h2 className={styles.title}>{home?.name ?? 'Yükleniyor...'}</h2>
+            <h2 id="home-detail-title" className={styles.title}>{home?.name ?? 'Yükleniyor...'}</h2>
             {home && <span className={badgeClass}>{badgeLabel}</span>}
             <LiveIndicator lastUpdated={lastUpdated} />
           </div>
           <div className={styles.headerActions}>
+            {(home?.id === 'h1' || home?.name?.includes('Kadıköy')) && (
+              <button
+                className={styles.view3dBtnModal}
+                onClick={() => {
+                  navigate(`/house?homeId=${homeId}`)
+                  onClose()
+                }}
+              >
+                <Box size={14} />
+                <span>3D Dijital İkizinde Gör</span>
+              </button>
+            )}
             <button className={styles.deleteBtn} onClick={() => setConfirmDelete(true)}>
               Konutu Sil
             </button>
@@ -228,28 +243,30 @@ export function HomeDetailModal({ homeId, initialHome, open, onClose }: HomeDeta
                 </div>
               </div>
 
-              {/* Threshold warnings */}
-              {home.quotaUsagePercent >= 100 && (
-                <div className={styles.thresholdBanner} data-severity="error">
-                  <span className={styles.thresholdIcon}>⚠</span>
-                  <div className={styles.thresholdContent}>
-                    <strong>Kota limiti aşıldı</strong>
-                    <span>Ceza tarifesi uygulanıyor. Tüketimi azaltmanız önerilir.</span>
+              {/* Threshold warnings & trend projection side by side */}
+              <div className={styles.thresholdContainer}>
+                {home.quotaUsagePercent >= 100 && (
+                  <div className={styles.thresholdBanner} data-severity="error">
+                    <span className={styles.thresholdIcon}>⚠</span>
+                    <div className={styles.thresholdContent}>
+                      <strong>Kota limiti aşıldı</strong>
+                      <span>Ceza tarifesi uygulanıyor. Tüketimi azaltmanız önerilir.</span>
+                    </div>
                   </div>
-                </div>
-              )}
-              {home.quotaUsagePercent >= 80 && home.quotaUsagePercent < 100 && (
-                <div className={styles.thresholdBanner} data-severity="warning">
-                  <span className={styles.thresholdIcon}>⚠</span>
-                  <div className={styles.thresholdContent}>
-                    <strong>Kota uyarısı — %80 aşıldı</strong>
-                    <span>Kullanımınız kota limitine yaklaşıyor.</span>
+                )}
+                {home.quotaUsagePercent >= 80 && home.quotaUsagePercent < 100 && (
+                  <div className={styles.thresholdBanner} data-severity="warning">
+                    <span className={styles.thresholdIcon}>⚠</span>
+                    <div className={styles.thresholdContent}>
+                      <strong>Kota uyarısı — %80 aşıldı</strong>
+                      <span>Kullanımınız kota limitine yaklaşıyor.</span>
+                    </div>
                   </div>
-                </div>
-              )}
+                )}
 
-              {/* Quota trend projection */}
-              <QuotaTrendProjection home={home} />
+                {/* Quota trend projection */}
+                <QuotaTrendProjection home={home} />
+              </div>
 
               {/* Quota progress bar */}
               <div className={styles.section}>

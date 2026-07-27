@@ -1,18 +1,18 @@
 :root,
 [data-theme="light"] {
-  /* Colors */
+  /* Colors — IBM Carbon */
   --color-primary: #0f62fe;
   --color-on-primary: #ffffff;
   --color-ink: #161616;
   --color-ink-muted: #525252;
-  --color-ink-subtle: #8c8c8c;
+  --color-ink-subtle: #6f6f6f;
   --color-canvas: #ffffff;
-  --color-surface-1: #f4f4f4;
-  --color-surface-2: #e0e0e0;
+  --color-surface-1: #ffffff;
+  --color-surface-2: #f4f4f4;
   --color-inverse-canvas: #161616;
   --color-inverse-surface-1: #262626;
-  --color-inverse-ink: #ffffff;
-  --color-inverse-ink-muted: #c6c6c6;
+  --color-inverse-ink: #f4f4f4;
+  --color-inverse-ink-muted: #6f6f6f;
   --color-hairline: #e0e0e0;
   --color-hairline-strong: #161616;
   --color-blue-60: #0043ce;
@@ -22,6 +22,9 @@
   --color-semantic-warning: #f1c21b;
   --color-semantic-error: #da1e28;
   --color-semantic-info: #0f62fe;
+  --color-primary-subtle: #edf5ff;
+  --color-warning-subtle: #fdf6dd;
+  --color-error-subtle: #fff1f1;
 
   /* Spacing */
   --space-xxs: 4px;
@@ -66,34 +69,49 @@
   --letter-spacing-display-lg: -0.4px;
   --letter-spacing-body: 0.16px;
   --letter-spacing-caption: 0.32px;
-
-  --color-primary-subtle: #edf5ff;
-  --color-warning-subtle: #fdf8e8;
-  --color-error-subtle: #fdf0f0;
 }
 
 :root {
-  --transition-theme: color 0.3s ease, background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+  --transition-theme: color 0.2s ease-in-out, background-color 0.2s ease-in-out, border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+
+/* Synchronized Universal Theme Transition for ALL Elements (Fonts, Text, Icons, SVGs, Cards, Inputs, Buttons & Backgrounds) */
+*,
+*::before,
+*::after,
+svg,
+svg path,
+svg circle,
+svg line,
+svg polyline,
+svg rect {
+  transition-property: background-color, color, border-color, fill, stroke, box-shadow !important;
+  transition-duration: 0.2s !important;
+  transition-timing-function: ease-in-out !important;
 }
 
 [data-theme="dark"] {
-  --color-primary: #4589ff;
+  --color-primary: #78a9ff;
   --color-on-primary: #ffffff;
   --color-ink: #f4f4f4;
   --color-ink-muted: #c6c6c6;
-  --color-ink-subtle: #8d8d8d;
+  --color-ink-subtle: #6f6f6f;
   --color-canvas: #161616;
   --color-surface-1: #262626;
-  --color-surface-2: #525252;
-  --color-hairline: #4c4c4c;
+  --color-surface-2: #393939;
+  --color-inverse-canvas: #ffffff;
+  --color-inverse-surface-1: #f4f4f4;
+  --color-inverse-ink: #161616;
+  --color-inverse-ink-muted: #525252;
+  --color-hairline: #393939;
   --color-hairline-strong: #f4f4f4;
-  --color-blue-hover: #5b9bff;
-  --color-blue-80: #0043ce;
+  --color-blue-hover: #a6c8ff;
+  --color-blue-80: #002d9c;
   --color-semantic-success: #42be65;
   --color-semantic-warning: #f1c21b;
-  --color-semantic-error: #ff8389;
-  --color-semantic-info: #4589ff;
-  --color-primary-subtle: #1c3a5f;
-  --color-warning-subtle: #332a00;
-  --color-error-subtle: #3b1012;
+  --color-semantic-error: #fa4d56;
+  --color-semantic-info: #78a9ff;
+  --color-primary-subtle: #001d6c;
+  --color-warning-subtle: #3a2a00;
+  --color-error-subtle: #2d0709;
 }

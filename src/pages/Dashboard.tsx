@@ -1,14 +1,13 @@
-import { useCallback, useMemo, useRef, useState } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 import { LayoutGrid, List, ArrowUp, ArrowDown } from 'lucide-react'
 import { TopNav } from '@/components/TopNav'
 import { SummaryBar } from '@/components/SummaryBar'
 import { LiveIndicator } from '@/components/LiveIndicator'
+import { DashboardAIAssistant } from '@/components/DashboardAIAssistant'
 import { DashboardGrid, type ViewMode } from '@/components/DashboardGrid'
 import { AddHomeModal } from '@/components/AddHomeModal'
 import { HomeDetailModal } from '@/components/HomeDetailModal'
-import { usePolling } from '@/hooks/usePolling'
-import { useToast } from '@/hooks/useToast'
-import { api } from '@/services/api'
+import { useHomes } from '@/hooks/useHomes'
 import { type Home } from '@/types/home'
 import { getHealthScore } from '@/utils/healthScore'
 import { PageTransition } from '@/components/PageTransition'
@@ -48,47 +47,20 @@ function sortHomes(homes: Home[], key: SortKey, dir: SortDir): Home[] {
 function filterHomes(homes: Home[], filters: Set<FilterKey>): Home[] {
   if (filters.size === 0) return homes
   return homes.filter((home) => {
-    if (filters.has('breach') && home.quotaUsagePercent < 100) return false
-    if (filters.has('anomaly') && !home.appliances.some((a) => a.consecutiveBreaches >= 3)) return false
-    return true
+    if (filters.has('breach') && home.quotaUsagePercent >= 100) return true
+    if (filters.has('anomaly') && home.appliances.some((a) => a.consecutiveBreaches >= 3)) return true
+    return false
   })
 }
 
 export function Dashboard() {
-  const { addToast } = useToast()
-  const [homes, setHomes] = useState<Home[]>([])
-  const [loading, setLoading] = useState(true)
+  const { homes, loading, isStale, lastUpdated } = useHomes()
   const [addModalOpen, setAddModalOpen] = useState(false)
-  const [lastUpdated, setLastUpdated] = useState<number | null>(null)
   const [sortKey, setSortKey] = useState<SortKey>('risk')
   const [sortDir, setSortDir] = useState<SortDir>('desc')
   const [activeFilters, setActiveFilters] = useState<Set<FilterKey>>(new Set())
   const [viewMode, setViewMode] = useState<ViewMode>('grid')
-  const [page, setPage] = useState(0)
-  const [totalPages, setTotalPages] = useState(0)
-  const [, setTotalElements] = useState(0)
   const [selectedHome, setSelectedHome] = useState<Home | null>(null)
-  const errorShown = useRef(false)
-
-  const fetchHomes = useCallback(async () => {
-    try {
-      const data = await api.getHomes(page)
-      setHomes(data.content)
-      setTotalPages(data.totalPages)
-      setTotalElements(data.totalElements)
-      setLastUpdated(Date.now())
-      errorShown.current = false
-    } catch {
-      if (!errorShown.current) {
-        errorShown.current = true
-        addToast('Veriler yüklenirken bir hata oluştu.', 'error')
-      }
-    } finally {
-      setLoading(false)
-    }
-  }, [addToast, page])
-
-  const pollingState = usePolling(fetchHomes, 2000)
 
   const toggleFilter = (key: FilterKey) => {
     setActiveFilters((prev) => {
@@ -97,7 +69,6 @@ export function Dashboard() {
       else next.add(key)
       return next
     })
-    setPage(0)
   }
 
   const sortedHomes = useMemo(() => {
@@ -105,9 +76,9 @@ export function Dashboard() {
     return sortHomes(filtered, sortKey, sortDir)
   }, [homes, sortKey, sortDir, activeFilters])
 
-  const handleHomeClick = (home: Home) => {
+  const handleHomeClick = useCallback((home: Home) => {
     setSelectedHome(home)
-  }
+  }, [])
 
   return (
     <>
@@ -126,7 +97,7 @@ export function Dashboard() {
           </header>
         </PageTransition>
 
-        {pollingState.isStale && (
+        {isStale && (
           <div className={styles.staleBanner}>
             Bağlantı kesildi — son bilinen veriler gösteriliyor.
           </div>
@@ -134,6 +105,10 @@ export function Dashboard() {
 
         <PageTransition delay={1}>
           {homes.length > 0 && <SummaryBar homes={homes} />}
+        </PageTransition>
+
+        <PageTransition delay={2}>
+          <DashboardAIAssistant homes={homes} />
         </PageTransition>
 
         <main className={styles.main}>
@@ -196,27 +171,6 @@ export function Dashboard() {
             onHomeClick={handleHomeClick}
             viewMode={viewMode}
           />
-          {totalPages > 1 && (
-            <div className={styles.pagination}>
-              <button
-                className={styles.pageBtn}
-                disabled={page === 0}
-                onClick={() => setPage(p => p - 1)}
-              >
-                Önceki
-              </button>
-              <span className={styles.pageInfo}>
-                {page + 1} / {totalPages}
-              </span>
-              <button
-                className={styles.pageBtn}
-                disabled={page >= totalPages - 1}
-                onClick={() => setPage(p => p + 1)}
-              >
-                Sonraki
-              </button>
-            </div>
-          )}
         </main>
       </div>
 

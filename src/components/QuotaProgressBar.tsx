@@ -34,7 +34,7 @@ export function QuotaProgressBar({ quotaPercent }: QuotaProgressBarProps) {
         </span>
         <span className={styles.tierLabel}>{getTierLabel()}</span>
       </div>
-      <div className={styles.track}>
+      <div className={styles.track} role="progressbar" aria-valuenow={quotaPercent} aria-valuemin={0} aria-valuemax={maxDisplay} aria-label="Kota kullanımı">
         <div
           className={`${styles.fill} ${styles[`fill_${state}`]}`}
           style={{ width: `${fillWidth}%` }}

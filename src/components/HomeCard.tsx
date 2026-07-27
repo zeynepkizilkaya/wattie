@@ -1,4 +1,6 @@
-import { Home as HomeIcon } from 'lucide-react'
+import { memo } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { Home as HomeIcon, Box } from 'lucide-react'
 import { type Home } from '@/types/home'
 import { getQuotaState } from '@/utils/quota'
 import { getHealthScore, getHealthColor } from '@/utils/healthScore'
@@ -11,7 +13,8 @@ interface HomeCardProps {
   onClick: (home: Home) => void
 }
 
-export function HomeCard({ home, onClick }: HomeCardProps) {
+export const HomeCard = memo(function HomeCard({ home, onClick }: HomeCardProps) {
+  const navigate = useNavigate()
   const state = getQuotaState(home.quotaUsagePercent)
   const health = getHealthScore(home)
   const healthColor = getHealthColor(health)
@@ -20,9 +23,12 @@ export function HomeCard({ home, onClick }: HomeCardProps) {
   const isNightTariff = (() => { const h = new Date().getHours(); return h >= 22 || h < 6 })()
 
   return (
-    <button
+    <div
       className={`${styles.card} ${styles[state]}`}
       onClick={() => onClick(home)}
+      role="button"
+      tabIndex={0}
+      onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onClick(home) } }}
     >
       <div className={styles.header}>
         <div className={styles.titleRow}>
@@ -32,6 +38,19 @@ export function HomeCard({ home, onClick }: HomeCardProps) {
             <span className={styles.anomalyBadge}>{anomalyCount}</span>
           )}
         </div>
+        {(home.id === 'h1' || home.name.includes('Kadıköy')) && (
+          <button
+            className={styles.view3dBtn}
+            title="3D Dijital İkizinde Gör"
+            onClick={(e) => {
+              e.stopPropagation()
+              navigate(`/house?homeId=${home.id}`)
+            }}
+          >
+            <Box size={13} />
+            <span>3D Görünüm</span>
+          </button>
+        )}
       </div>
 
       <div className={styles.heroRow}>
@@ -95,6 +114,6 @@ export function HomeCard({ home, onClick }: HomeCardProps) {
           <span className={styles.metricValue}>{home.appliances.length}</span>
         </div>
       </div>
-    </button>
+    </div>
   )
-}
+})
