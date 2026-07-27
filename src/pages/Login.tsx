@@ -40,7 +40,7 @@ export function Login() {
       })
       addToast('Başarıyla giriş yapıldı.', 'success')
       setExiting(true)
-      timerRef.current = setTimeout(() => navigate('/', { replace: true }), 400)
+      timerRef.current = setTimeout(() => navigate('/dashboard', { replace: true }), 400)
     } catch {
       addToast('Giriş başarısız. Lütfen tekrar deneyin.', 'error')
     } finally {
@@ -60,7 +60,7 @@ export function Login() {
       })
       addToast('Demo hesabıyla giriş yapıldı.', 'success')
       setExiting(true)
-      timerRef.current = setTimeout(() => navigate('/', { replace: true }), 400)
+      timerRef.current = setTimeout(() => navigate('/dashboard', { replace: true }), 400)
       setSubmitting(false)
     }, 300)
   }

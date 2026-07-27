@@ -52,7 +52,7 @@ export function Signup() {
       })
       addToast('Kayıt başarıyla oluşturuldu.', 'success')
       setExiting(true)
-      timerRef.current = setTimeout(() => navigate('/', { replace: true }), 400)
+      timerRef.current = setTimeout(() => navigate('/dashboard', { replace: true }), 400)
     } catch {
       addToast('Kayıt başarısız. Lütfen tekrar deneyin.', 'error')
     } finally {

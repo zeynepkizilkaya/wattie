@@ -20,10 +20,10 @@ export function App() {
           <ToastProvider>
             <HomesProvider>
               <Routes>
+                <Route path="/" element={<Navigate to="/login" replace />} />
                 <Route path="/login" element={<Login />} />
                 <Route path="/signup" element={<Signup />} />
-                <Route path="/" element={<Dashboard />} />
-                <Route path="/dashboard" element={<Navigate to="/" replace />} />
+                <Route path="/dashboard" element={<Dashboard />} />
                 <Route
                   path="/house"
                   element={
