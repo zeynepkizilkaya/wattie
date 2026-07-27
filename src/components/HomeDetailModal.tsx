@@ -138,10 +138,15 @@ export function HomeDetailModal({ homeId, initialHome, open, onClose }: HomeDeta
 
   // Delete home
   const [confirmDelete, setConfirmDelete] = useState(false)
+  const { removeAppliance, deleteHome } = useHomes()
 
   const handleDeleteHome = async () => {
-    addToast('Konut silme özelliği henüz desteklenmiyor.', 'error')
+    if (home) {
+      deleteHome(home.id)
+      addToast(`"${home.name}" konuta başarıyla silindi.`, 'success')
+    }
     setConfirmDelete(false)
+    onClose()
   }
 
   // Remove appliance handler
@@ -152,10 +157,12 @@ export function HomeDetailModal({ homeId, initialHome, open, onClose }: HomeDeta
   }, [])
 
   const confirmRemoveAppliance = useCallback(async () => {
-    if (!pendingRemoveAppliance) return
-    addToast('Cihaz kaldırma özelliği henüz desteklenmiyor.', 'error')
+    if (!pendingRemoveAppliance || !home) return
+    const appName = home.appliances.find(a => a.id === pendingRemoveAppliance)?.name || 'Cihaz'
+    removeAppliance(home.id, pendingRemoveAppliance)
+    addToast(`"${appName}" cihazı başarıyla kaldırıldı.`, 'success')
     setPendingRemoveAppliance(null)
-  }, [pendingRemoveAppliance, addToast])
+  }, [pendingRemoveAppliance, home, removeAppliance, addToast])
 
   const handleUpdateLimit = useCallback(async (_applianceId: string, _newLimit: number) => {
     addToast('Limit güncelleme özelliği henüz desteklenmiyor.', 'error')
