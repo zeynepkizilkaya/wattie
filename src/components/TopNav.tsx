@@ -28,13 +28,13 @@ export function TopNav({ onAddHome }: TopNavProps) {
     <nav className={styles.nav}>
       <div className={styles.inner}>
         <div className={styles.leftSection}>
-          <Link to="/" className={styles.brand}>
+          <Link to="/dashboard" className={styles.brand}>
             <Zap size={18} className={styles.brandIcon} />
             <span>Wattie</span>
           </Link>
           <div className={styles.navTabs}>
             <NavLink
-              to="/"
+              to="/dashboard"
               end
               className={({ isActive }) =>
                 isActive ? `${styles.tab} ${styles.tabActive}` : styles.tab

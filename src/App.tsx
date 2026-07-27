@@ -5,6 +5,7 @@ import { ToastContainer } from '@/components/ToastContainer'
 import { ToastProvider } from '@/hooks/useToast'
 import { HomesProvider } from '@/hooks/useHomes'
 import { AuthProvider } from '@/hooks/useAuth'
+import { ProtectedRoute } from '@/components/ProtectedRoute'
 import { Dashboard } from '@/pages/Dashboard'
 import { Login } from '@/pages/Login'
 import { Signup } from '@/pages/Signup'
@@ -23,13 +24,22 @@ export function App() {
                 <Route path="/" element={<Navigate to="/login" replace />} />
                 <Route path="/login" element={<Login />} />
                 <Route path="/signup" element={<Signup />} />
-                <Route path="/dashboard" element={<Dashboard />} />
+                <Route
+                  path="/dashboard"
+                  element={
+                    <ProtectedRoute>
+                      <Dashboard />
+                    </ProtectedRoute>
+                  }
+                />
                 <Route
                   path="/house"
                   element={
-                    <Suspense fallback={<div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100vh', color: 'var(--color-ink-muted)' }}>Yükleniyor...</div>}>
-                      <HousePage />
-                    </Suspense>
+                    <ProtectedRoute>
+                      <Suspense fallback={<div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100vh', color: 'var(--color-ink-muted)' }}>Yükleniyor...</div>}>
+                        <HousePage />
+                      </Suspense>
+                    </ProtectedRoute>
                   }
                 />
                 <Route path="*" element={<NotFound />} />
