@@ -3,6 +3,7 @@ import { api, transformHome } from '@/services/api'
 import { useToast } from '@/hooks/useToast'
 import { mockHomes } from '@/mocks/data'
 import { type Home, type HomeStatus } from '@/types/home'
+import { calculateTieredBilling } from '@/utils/billing'
 
 interface HomesContextValue {
   homes: Home[]
@@ -114,13 +115,13 @@ export function HomesProvider({ children }: { children: React.ReactNode }) {
             // If live backend status is available, use it
             if (status) {
               const kwhRatio = home.powerQuotaKwh > 0 ? status.totalKwh / home.powerQuotaKwh : 0
-              const costRatio = home.financialQuota > 0 ? status.totalCost / home.financialQuota : 0
-              const quotaUsagePercent = Math.max(kwhRatio, costRatio) * 100
+              const quotaUsagePercent = Math.max(kwhRatio, 0) * 100
+              const tiered = calculateTieredBilling(status.totalKwh, quotaUsagePercent)
 
               return {
                 ...home,
                 totalConsumptionKwh: status.totalKwh,
-                billingAmountTry: status.totalCost,
+                billingAmountTry: tiered.totalBill,
                 penaltyActive: status.penaltyActive,
                 quotaUsagePercent,
               }
@@ -137,18 +138,17 @@ export function HomesProvider({ children }: { children: React.ReactNode }) {
             const currentTotalWatt = updatedAppliances.reduce((sum, a) => sum + a.currentWatt, 0)
             const addedKwh = (currentTotalWatt / 1000) * (1.5 / 3600)
             const newTotalKwh = home.totalConsumptionKwh + addedKwh
-            const rate = home.penaltyActive ? home.penaltyTariffRate : home.normalTariffRate
-            const newBilling = home.billingAmountTry + addedKwh * rate
 
             const kwhRatio = home.powerQuotaKwh > 0 ? newTotalKwh / home.powerQuotaKwh : 0
-            const costRatio = home.financialQuota > 0 ? newBilling / home.financialQuota : 0
-            const quotaUsagePercent = Math.max(kwhRatio, costRatio) * 100
+            const quotaUsagePercent = kwhRatio * 100
+            const tiered = calculateTieredBilling(newTotalKwh, quotaUsagePercent)
 
             return {
               ...home,
               appliances: updatedAppliances,
               totalConsumptionKwh: newTotalKwh,
-              billingAmountTry: newBilling,
+              billingAmountTry: tiered.totalBill,
+              penaltyActive: quotaUsagePercent >= 100,
               quotaUsagePercent,
             }
           })
